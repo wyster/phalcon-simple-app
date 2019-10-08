@@ -1,0 +1,6 @@
+{
+    "require": {
+        "phalcon/incubator": "^3.4",
+        "datto/json-rpc": "^6.0"
+    }
+}

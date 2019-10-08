@@ -6,19 +6,14 @@ use Phalcon\Mvc\Micro\Collection as MicroCollection;
  * @var \Phalcon\Mvc\Micro $app
  */
 
-/**
- * Add your routes here
- */
-$app->get('/', function () {
-    echo $this['view']->render('index');
-});
 
-$orders = new MicroCollection();
+$index = new MicroCollection();
 
-$orders->setHandler(new IndexController());
-$orders->get('/', 'index');
+$index->setHandler(new IndexController());
+$index->get('/', 'index');
+$index->post('/', 'auth');
 
-$app->mount($orders);
+$app->mount($index);
 
 /**
  * Not found handler
