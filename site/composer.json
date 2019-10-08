@@ -2,5 +2,9 @@
     "require": {
         "phalcon/incubator": "^3.4",
         "datto/json-rpc": "^6.0"
+    },
+    "require-dev": {
+        "phalcon/devtools": "^3.4",
+        "phalcon/ide-stubs": "^3.4"
     }
 }
