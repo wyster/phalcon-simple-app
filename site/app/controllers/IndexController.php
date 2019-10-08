@@ -80,11 +80,7 @@ class IndexController extends \Phalcon\Mvc\Controller
         $provider->setBaseUri('http://users');
         $response = $provider->post(
             '/',
-            [$message],
-            false,
-            [
-                'Content-Type' => 'application/json'
-            ]
+            $message
         );
 
         $result = json_decode($response->body, true);
