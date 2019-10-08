@@ -55,6 +55,7 @@ class IndexController extends \Phalcon\Mvc\Controller
         return $this->view->render('index', 'index');
     }
 
+    // @todo тесты
     public function authAction()
     {
         $form = $this->createForm();
@@ -66,6 +67,7 @@ class IndexController extends \Phalcon\Mvc\Controller
             }
             return $this->view->render('index', 'index');
         }
+
         $client = new Client();
         $client->query(
             1,
@@ -77,12 +79,13 @@ class IndexController extends \Phalcon\Mvc\Controller
         );
 
         $message = $client->encode();
+
         $this->view->request = $message;
 
         $provider = Request::getProvider();
-        $provider->setBaseUri('http://users');
         $response = $provider->post(
-            '/',
+            // @todo вынести в env
+            'http://users',
             $message
         );
 
