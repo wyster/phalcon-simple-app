@@ -4,6 +4,7 @@ use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Micro;
 
 error_reporting(E_ALL);
+ini_set('display_errors', 'On');
 
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');

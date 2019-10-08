@@ -1,7 +1,9 @@
 <?php
 
+use Phalcon\Http\Response\Cookies;
 use Phalcon\Mvc\View\Simple as View;
 use Phalcon\Mvc\Url as UrlResolver;
+use Phalcon\Session\Adapter\Files as Session;
 
 /**
  * Shared configuration service
@@ -55,4 +57,15 @@ $di->setShared('db', function () {
 
     return $connection;
 });
+
+$di->setShared(
+    'session',
+    function () {
+        $session = new Session();
+
+        $session->start();
+
+        return $session;
+    }
+);
 
