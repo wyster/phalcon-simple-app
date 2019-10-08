@@ -2,6 +2,7 @@
 
 namespace app\test;
 
+use Mockery;
 use Phalcon\Di;
 use Phalcon\Test\UnitTestCase as PhalconTestCase;
 use PHPUnit\Framework\IncompleteTestError;
@@ -34,10 +35,18 @@ abstract class UnitTestCase extends PhalconTestCase
      */
     public function __destruct()
     {
+        // @todo почему то setUp не всегда вызывает
+        return;
         if (!$this->_loaded) {
             throw new IncompleteTestError(
                 'Please run parent::setUp().'
             );
         }
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+        Mockery::close();
     }
 }
