@@ -12,9 +12,6 @@ use Phalcon\Validation\Validator\PresenceOf;
  */
 class Auth extends \Phalcon\Forms\Form
 {
-    /**
-     * This method returns the default value for field 'csrf'
-     */
     public function getCsrf(): string
     {
         return $this->security->getToken();
@@ -32,7 +29,7 @@ class Auth extends \Phalcon\Forms\Form
             'message' => 'Password is required'
         ]));
         $this->add($password);
-        $csrf = new Hidden('csrf', ['value' => $this->security->getToken()]);
+        $csrf = new Hidden('csrf');
         $csrf->addValidator(new PresenceOf([
             'message' => 'Csrf is required'
         ]));
