@@ -8,9 +8,6 @@ use Phalcon\Validation\Validator\Alnum;
 use Phalcon\Validation\Validator\Identical;
 use Phalcon\Validation\Validator\PresenceOf;
 
-/**
- * @author Ilya Zelenin <wyster@make.im>
- */
 class Auth extends \Phalcon\Forms\Form
 {
     public function getCsrf(): string

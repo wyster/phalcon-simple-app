@@ -83,6 +83,10 @@ class IndexController extends \Phalcon\Mvc\Controller
             $message
         );
 
+        if ($response->header->statusCode !== 200) {
+            throw new Exception('Fatal error');
+        }
+
         $result = json_decode($response->body, true);
         if (array_key_exists('error', $result)) {
             $message = $this->getTranslation()->t($result['error']['message']);
