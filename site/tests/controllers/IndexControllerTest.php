@@ -30,7 +30,10 @@ class IndexControllerTest extends UnitTestCase
     public function testIndex(): void
     {
         $controller = new \app\controllers\IndexController();
-        $content = $controller->indexAction()->getContent();
+        ob_start();
+        $controller->indexAction()->getContent();
+        $content = ob_get_contents();
+        ob_end_clean();
         $this->assertStringContainsString('<form', $content);
         $this->assertStringContainsString('name="login"', $content);
         $this->assertStringContainsString('name="password"', $content);
