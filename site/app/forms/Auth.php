@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 namespace app\forms;
+
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Validation\Validator\Identical;
@@ -22,19 +23,19 @@ class Auth extends \Phalcon\Forms\Form
     public function initialize()
     {
         $login = new Text('login', ['required' => true]);
-        $login->addValidator(new PresenceOf(array(
+        $login->addValidator(new PresenceOf([
             'message' => 'Login is required'
-        )));
+        ]));
         $this->add($login);
         $password = new Text('password', ['required' => true]);
-        $password->addValidator(new PresenceOf(array(
+        $password->addValidator(new PresenceOf([
             'message' => 'Password is required'
-        )));
+        ]));
         $this->add($password);
         $csrf = new Hidden('csrf', ['value' => $this->security->getToken()]);
-        $csrf->addValidator(new PresenceOf(array(
+        $csrf->addValidator(new PresenceOf([
             'message' => 'Csrf is required'
-        )));
+        ]));
         $csrf->addValidator(
             new Identical([
                 'value' => $this->security->checkToken('csrf', $this->getValue('csrf')),

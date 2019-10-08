@@ -58,7 +58,7 @@ class IndexController extends \Phalcon\Mvc\Controller
         $this->view->form = $form;
 
         if (!$form->isValid($this->request->getPost())) {
-            foreach($form->getMessages() as $message){
+            foreach ($form->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
             return $this->view->render('index', 'index');
@@ -99,4 +99,3 @@ class IndexController extends \Phalcon\Mvc\Controller
         return $this->view->render('index', 'index');
     }
 }
-
