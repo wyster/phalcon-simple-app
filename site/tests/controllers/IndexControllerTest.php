@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Test\Controllers;
+namespace app\test\controllers;
 
 use Phalcon\Mvc\View;
-use Test\UnitTestCase;
+use app\test\UnitTestCase;
 
 /**
  * Class UnitTest

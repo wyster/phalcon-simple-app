@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace app\test;
 
 use Phalcon\Di;
 use Phalcon\Test\UnitTestCase as PhalconTestCase;

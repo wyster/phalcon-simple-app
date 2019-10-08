@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace app\test;
 
 use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
@@ -19,16 +19,7 @@ include ROOT_PATH . '/../vendor/autoload.php';
 
 $loader = new Loader();
 
-$config = include ROOT_PATH . '/../app/config/config.php';
-var_dump($config->application->controllersDir);
-
-$loader->registerDirs(
-    [
-        ROOT_PATH,
-        $config->application->controllersDir,
-        $config->application->modelsDir
-    ]
-)->register();
+include ROOT_PATH . '/../app/config/config.php';
 
 $loader->register();
 
