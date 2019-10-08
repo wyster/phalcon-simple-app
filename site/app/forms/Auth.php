@@ -4,6 +4,7 @@ namespace app\forms;
 
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Text;
+use Phalcon\Validation\Validator\Alnum;
 use Phalcon\Validation\Validator\Identical;
 use Phalcon\Validation\Validator\PresenceOf;
 
@@ -22,6 +23,9 @@ class Auth extends \Phalcon\Forms\Form
         $login = new Text('login', ['required' => true]);
         $login->addValidator(new PresenceOf([
             'message' => 'Login is required'
+        ]));
+        $login->addValidator(new Alnum([
+            'message' => 'In login allowed only alphanumeric character(s).'
         ]));
         $this->add($login);
         $password = new Text('password', ['required' => true]);
