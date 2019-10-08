@@ -10,7 +10,12 @@ use Phalcon\Validation\Validator\PresenceOf;
 
 class Auth extends \Phalcon\Forms\Form
 {
-    public function getCsrf(): string
+    private function checkToken(): bool
+    {
+        return $this->security->checkToken('csrf', $this->getValue('csrf'));
+    }
+
+    private function getCsrf(): ?string
     {
         return $this->security->getToken();
     }
@@ -36,7 +41,7 @@ class Auth extends \Phalcon\Forms\Form
         ]));
         $csrf->addValidator(
             new Identical([
-                'value' => $this->security->checkToken('csrf', $this->getValue('csrf')),
+                'value' => $this->checkToken(),
                 'message' => 'CSRF validation failed'
             ])
         );

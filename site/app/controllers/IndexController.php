@@ -1,10 +1,15 @@
 <?php declare(strict_types=1);
 
+namespace app\controllers;
+
 use Datto\JsonRpc\Client;
+use Exception;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Http\Client\Request;
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\ViewInterface;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\Identical;
@@ -44,16 +49,14 @@ class IndexController extends \Phalcon\Mvc\Controller
         return new \app\forms\Auth();
     }
 
-    public function index()
+    public function indexAction()
     {
-        $this->session->start();
         $this->view->form = $this->createForm();
         return $this->view->render('index', 'index');
     }
 
-    public function auth()
+    public function authAction()
     {
-        $this->session->start();
         $form = $this->createForm();
         $this->view->form = $form;
 
@@ -84,10 +87,17 @@ class IndexController extends \Phalcon\Mvc\Controller
         );
 
         if ($response->header->statusCode !== 200) {
-            throw new Exception('Fatal error');
+            $this->view->message = 'Fatal error! Status code: ' . $response->header->status;
+            $this->view->response = $response->body;
+            return $this->view->render('index', 'index');
         }
 
         $result = json_decode($response->body, true);
+        if (!is_array($result)) {
+            $this->view->message = 'Fatal error! Body is empty';
+            $this->view->response = $response->body;
+            return $this->view->render('index', 'index');
+        }
         if (array_key_exists('error', $result)) {
             $message = $this->getTranslation()->t($result['error']['message']);
         } else {

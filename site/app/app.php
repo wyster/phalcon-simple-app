@@ -12,9 +12,9 @@ use \Phalcon\Mvc\Dispatcher as PhDispatcher;
 
 $index = new MicroCollection();
 
-$index->setHandler(new IndexController());
-$index->get('/', 'index');
-$index->post('/', 'auth');
+$index->setHandler(new \app\controllers\IndexController());
+$index->get('/', 'indexAction');
+$index->post('/', 'authAction');
 
 $app->mount($index);
 
@@ -37,3 +37,5 @@ $eventsManager->attach(
     }
 );
 $app->setEventsManager($eventsManager);
+
+$app->session->start();
