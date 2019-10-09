@@ -19,5 +19,8 @@
         "psr-4": {
             "app\\test\\": "tests"
         }
+    },
+    "scripts": {
+        "serve:debug": "php -d xdebug.remote_enable=1 -d xdebug.remote_connect_back=1 -S 0.0.0.0:8000 -t public .htrouter.php"
     }
 }
