@@ -52,7 +52,7 @@ class IndexControllerTest extends UnitTestCase
         ]);
         $clientRequest = $this->createMock(\Phalcon\Http\Client\Provider\Curl::class);
         $clientRequest->method('post')->willReturn(new \Phalcon\Http\Client\Response());
-        $this->di->set(\Phalcon\Http\Client\Provider\Curl::class, $clientRequest);
+        $this->di->set(\Phalcon\Http\Client\Request::class, $clientRequest);
         $this->di->setShared('request', $request);
         $this->di->setShared('flash', new \Phalcon\Flash\Direct());
         $this->di->set(\Phalcon\Translate\AdapterInterface::class, $this->createMock(\Phalcon\Translate\Adapter::class));

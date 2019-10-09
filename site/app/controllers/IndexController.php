@@ -2,21 +2,25 @@
 
 namespace app\controllers;
 
+use app\forms\Auth as FormAuth;
 use Datto\JsonRpc\Client;
-use Phalcon\Forms\Form;
-use Phalcon\Http\Client\Response;
+use Phalcon\Http\Client\Request as ClientRequest;
+use Phalcon\Http\Client\Response as ClientResponse;
 use Phalcon\Http\RequestInterface;
+use Phalcon\Translate\AdapterInterface as Translate;
+use function array_key_exists;
+use function is_array;
 
 class IndexController extends \Phalcon\Mvc\Controller
 {
-    private function getTranslation(): \Phalcon\Translate\AdapterInterface
+    private function getTranslation(): Translate
     {
-        return $this->getDI()->get(\Phalcon\Translate\AdapterInterface::class);
+        return $this->getDI()->get(Translate::class);
     }
 
-    private function getForm(): Form
+    private function getForm(): FormAuth
     {
-        return $this->getDI()->get(\app\forms\Auth::class);
+        return $this->getDI()->get(FormAuth::class);
     }
 
     public function indexAction()
@@ -47,7 +51,7 @@ class IndexController extends \Phalcon\Mvc\Controller
         return $this->view->render('index', 'index');
     }
 
-    private function prepareResponse(Response $response): string
+    private function prepareResponse(ClientResponse $response): string
     {
         if ($response->header->statusCode !== 200) {
             return 'Fatal error! Status code: ' . $response->header->statusCode;
@@ -95,9 +99,9 @@ class IndexController extends \Phalcon\Mvc\Controller
         return $client->encode();
     }
 
-    private function sendRequest(string $body): Response
+    private function sendRequest(string $body): ClientResponse
     {
-        $provider = $this->getDI()->get(\Phalcon\Http\Client\Provider\Curl::class);
+        $provider = $this->getDI()->get(ClientRequest::class);
         $response = $provider->post(
         // @todo вынести в env
             'http://users',
