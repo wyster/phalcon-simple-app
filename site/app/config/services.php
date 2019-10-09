@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
-use Phalcon\Http\Response\Cookies;
-use Phalcon\Mvc\View\Simple as View;
 use Phalcon\Mvc\Url as UrlResolver;
+use Phalcon\Mvc\View\Simple as View;
 use Phalcon\Session\Adapter\Files as Session;
 
 /**
@@ -42,5 +41,33 @@ $di->setShared(
         $session->start();
 
         return $session;
+    }
+);
+
+/**
+ * @url https://docs.phalcon.io/3.4/ru-ru/translate
+ */
+$di->set(
+    \Phalcon\Translate\AdapterInterface::class,
+    function () {
+        // Получение оптимального языка из браузера
+        $language = $this->request->getBestLanguage();
+
+        $translationFile = APP_PATH . '/messages/' . $language. '.php';
+
+        // Проверка существования перевода для полученного языка
+        if (file_exists($translationFile)) {
+            $messages = require $translationFile;
+        } else {
+            // Переключение на язык по умолчанию
+            $messages = require APP_PATH . '/messages/en.php';
+        }
+
+        // Возвращение объекта работы с переводом
+        return new NativeArray(
+            [
+                'content' => $messages,
+            ]
+        );
     }
 );

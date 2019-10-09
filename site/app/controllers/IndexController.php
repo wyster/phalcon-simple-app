@@ -3,71 +3,85 @@
 namespace app\controllers;
 
 use Datto\JsonRpc\Client;
-use Exception;
-use Phalcon\Forms\Element\Hidden;
-use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
-use Phalcon\Http\Client\Request;
-use Phalcon\Mvc\View;
-use Phalcon\Mvc\ViewInterface;
-use Phalcon\Translate\Adapter\NativeArray;
-use Phalcon\Validation;
-use Phalcon\Validation\Validator\Identical;
-use Phalcon\Validation\Validator\PresenceOf;
+use Phalcon\Http\Client\Response;
+use Phalcon\Http\RequestInterface;
 
 class IndexController extends \Phalcon\Mvc\Controller
 {
-    /**
-     * @url https://docs.phalcon.io/3.4/ru-ru/translate
-     * @return NativeArray
-     */
-    private function getTranslation(): NativeArray
+    private function getTranslation(): \Phalcon\Translate\AdapterInterface
     {
-        // Получение оптимального языка из браузера
-        $language = $this->request->getBestLanguage();
-
-        $translationFile = APP_PATH . '/messages/' . $language. '.php';
-
-        // Проверка существования перевода для полученного языка
-        if (file_exists($translationFile)) {
-            $messages = require $translationFile;
-        } else {
-            // Переключение на язык по умолчанию
-            $messages = require APP_PATH . '/messages/en.php';
-        }
-
-        // Возвращение объекта работы с переводом
-        return new NativeArray(
-            [
-                'content' => $messages,
-            ]
-        );
+        return $this->getDI()->get(\Phalcon\Translate\AdapterInterface::class);
     }
 
-    private function createForm(): Form
+    private function getForm(): Form
     {
-        return new \app\forms\Auth();
+        return $this->getDI()->get(\app\forms\Auth::class);
     }
 
     public function indexAction()
     {
-        $this->view->form = $this->createForm();
+        $this->view->form = $this->getForm();
         return $this->view->render('index', 'index');
     }
 
-    // @todo тесты
     public function authAction()
     {
-        $form = $this->createForm();
+        $form = $this->getForm();
         $this->view->form = $form;
 
         if (!$form->isValid($this->request->getPost())) {
-            foreach ($form->getMessages() as $message) {
-                $this->flash->error($message->getMessage());
+            foreach ($form->getMessages() as $body) {
+                $this->flash->error($body->getMessage());
             }
             return $this->view->render('index', 'index');
         }
 
+        $body = $this->prepareRequestBody($this->request);
+        $response = $this->sendRequest($body);
+
+        $this->view->request = $body;
+        $this->view->response = $response->body;
+        $this->view->message = $this->getTranslation()->t($this->prepareResponse($response));
+
+        return $this->view->render('index', 'index');
+    }
+
+    private function prepareResponse(Response $response): string
+    {
+        if ($response->header->statusCode !== 200) {
+            return 'Fatal error! Status code: ' . $response->header->statusCode;
+        }
+
+        if (!$response->body) {
+            return 'Fatal error! Body is empty';
+        }
+
+        try {
+            $result = json_decode($response->body, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return 'JSON exception: ' . $e->getMessage();
+        }
+        if (array_key_exists('error', $result)) {
+            if (!is_array($result['error']) || !array_key_exists('message', $result['error'])) {
+                return 'Invalid response, not found section error.message';
+            }
+            return $result['error']['message'];
+        }
+
+        if (!array_key_exists('result', $result)) {
+            return 'Invalid response, not found section result';
+        }
+
+        if (!array_key_exists('id', $result['result'])) {
+            return 'Invalid response, not found section result.id';
+        }
+
+        return 'Success auth, user id: ' . $result['result']['id'];
+    }
+
+    private function prepareRequestBody(RequestInterface $request): string
+    {
         $client = new Client();
         $client->query(
             1,
@@ -78,37 +92,17 @@ class IndexController extends \Phalcon\Mvc\Controller
             ]
         );
 
-        $message = $client->encode();
+        return $client->encode();
+    }
 
-        $this->view->request = $message;
-
-        $provider = Request::getProvider();
+    private function sendRequest(string $body): Response
+    {
+        $provider = $this->getDI()->get(\Phalcon\Http\Client\Provider\Curl::class);
         $response = $provider->post(
-            // @todo вынести в env
+        // @todo вынести в env
             'http://users',
-            $message
+            $body
         );
-
-        if ($response->header->statusCode !== 200) {
-            $this->view->message = 'Fatal error! Status code: ' . $response->header->status;
-            $this->view->response = $response->body;
-            return $this->view->render('index', 'index');
-        }
-
-        $result = json_decode($response->body, true);
-        if (!is_array($result)) {
-            $this->view->message = 'Fatal error! Body is empty';
-            $this->view->response = $response->body;
-            return $this->view->render('index', 'index');
-        }
-        if (array_key_exists('error', $result)) {
-            $message = $this->getTranslation()->t($result['error']['message']);
-        } else {
-            $message = 'Success auth, user id: ' . $result['result']['id'];
-        }
-
-        $this->view->message = $message;
-        $this->view->response = $response->body;
-        return $this->view->render('index', 'index');
+        return $response;
     }
 }
