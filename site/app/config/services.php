@@ -3,6 +3,7 @@
 use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Mvc\View\Simple as View;
 use Phalcon\Session\Adapter\Files as Session;
+use Phalcon\Translate\Adapter\NativeArray;
 
 /**
  * Shared configuration service
@@ -51,7 +52,7 @@ $di->set(
     \Phalcon\Translate\AdapterInterface::class,
     function () {
         // Получение оптимального языка из браузера
-        $language = $this->request->getBestLanguage();
+        $language = $this['request']->getBestLanguage();
 
         $translationFile = APP_PATH . '/messages/' . $language. '.php';
 
