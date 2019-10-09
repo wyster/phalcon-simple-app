@@ -103,8 +103,7 @@ class IndexController extends \Phalcon\Mvc\Controller
     {
         $provider = $this->getDI()->get(ClientRequest::class);
         $response = $provider->post(
-        // @todo вынести в env
-            'http://users',
+            'http://' . $_ENV['USERS_CONTAINER_NAME'],
             $body
         );
         return $response;
