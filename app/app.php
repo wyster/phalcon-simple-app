@@ -2,7 +2,6 @@
 
 use Phalcon\Events\Event;
 use Phalcon\Mvc\Micro\Collection as MicroCollection;
-use \Phalcon\Mvc\Dispatcher as PhDispatcher;
 
 /**
  * Local variables
