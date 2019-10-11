@@ -73,6 +73,6 @@ $di->set(
     }
 );
 
-$di->set(\Phalcon\Http\Client\Request::class, function() {
+$di->set(\Phalcon\Http\Client\Request::class, function () {
     return \Phalcon\Http\Client\Request::getProvider();
 });
