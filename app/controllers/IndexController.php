@@ -101,12 +101,9 @@ class IndexController extends \Phalcon\Mvc\Controller
 
     private function sendRequest(string $body): ClientResponse
     {
-        if (!array_key_exists('USERS_CONTAINER_NAME', $_ENV)) {
-            throw new \Exception('Env USERS_CONTAINER_NAME not setted');
-        }
         $provider = $this->getDI()->get(ClientRequest::class);
         $response = $provider->post(
-            'http://' . $_ENV['USERS_CONTAINER_NAME'],
+            'http://' . \app\Helper\Env::getFromEnv('USERS_CONTAINER_NAME'),
             $body
         );
         return $response;

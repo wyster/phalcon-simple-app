@@ -28,6 +28,12 @@ class IndexControllerTest extends UnitTestCase
         });
     }
 
+    public function tearDown()
+    {
+        parent::tearDown();
+        unset($_ENV['USERS_CONTAINER_NAME']);
+    }
+
     public function testIndex(): void
     {
         $controller = new IndexController();
@@ -44,6 +50,7 @@ class IndexControllerTest extends UnitTestCase
 
     public function testAuthAction(): void
     {
+        $_ENV['USERS_CONTAINER_NAME'] = 'users';
         $request = $this->createMock(\Phalcon\Http\Request::class);
         $request->method('getPost')->willReturn([
             'login' => 'admin',
@@ -111,9 +118,9 @@ class IndexControllerTest extends UnitTestCase
         $this->assertSame('Invalid response, not found section error.message', $result);
 
         $response->header->statusCode = 200;
-        $response->body = '{"error":{"message:": "Invalid request"}}';
+        $response->body = '{"error":{"message": "Invalid request"}}';
         $result = $method->invoke($controller, $response);
-        $this->assertSame('Invalid response, not found section error.message', $result);
+        $this->assertSame('Invalid request', $result);
 
         $response->header->statusCode = 200;
         $response->body = '{}';

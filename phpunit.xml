@@ -9,6 +9,7 @@
             <exclude>
                 <file>./app/app.php</file>
                 <directory>./app/config</directory>
+                <directory>./app/messages</directory>
             </exclude>
         </whitelist>
     </filter>
