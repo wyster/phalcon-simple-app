@@ -14,6 +14,7 @@ unit-test:
 	./vendor/bin/phpunit \
 
 coverage: unit-test
-	@docker run -it --rm -v `pwd`:`pwd` -w `pwd` -v /var/run/docker.sock:/var/run/docker.sock phalcon-simple-app \
-	php coverage-checker.php ./data/clover.xml 100
+	[ ! -f ./data/clover.xml ] && echo "Need run make unit-test before" && exit 1 \
+    	|| docker run -it --rm -v `pwd`:`pwd` -w `pwd` -v /var/run/docker.sock:/var/run/docker.sock phalcon-simple-app \
+    	php coverage-checker.php ./data/clover.xml 100
 
