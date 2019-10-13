@@ -6,7 +6,7 @@
 
 2. Запуск 
 
-`$ docker container run --env USE_PHP_INTERNAL_SERVER=1 --publish 80:80 -v $(pwd):/var/www/html phalcon-simple-app`
+`$ docker container run  -e USE_PHP_INTERNAL_SERVER=1 -e ENABLE_XDEBUG --publish 80:80 -v $(pwd):/var/www/html phalcon-simple-app`
 
 В `--publish` можно передать желаемый порт, например 8080 `--publish 8080:80`
 
