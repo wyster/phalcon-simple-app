@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace app\controllers;
+namespace App\Controller;
 
-use app\forms\Auth as FormAuth;
+use App\Form\Auth as FormAuth;
 use Datto\JsonRpc\Client;
 use Phalcon\Http\Client\Request as ClientRequest;
 use Phalcon\Http\Client\Response as ClientResponse;
@@ -103,7 +103,7 @@ class IndexController extends \Phalcon\Mvc\Controller
     {
         $provider = $this->getDI()->get(ClientRequest::class);
         $response = $provider->post(
-            'http://' . \app\Helper\Env::getFromEnv('USERS_CONTAINER_NAME'),
+            'http://' . \App\Helper\Env::getFromEnv('USERS_CONTAINER_NAME'),
             $body
         );
         return $response;

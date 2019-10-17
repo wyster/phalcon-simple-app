@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace app\forms;
+namespace App\Form;
 
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Text;

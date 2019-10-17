@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace app\Helper;
+namespace App\Helper;
 use Exception;
 use function array_key_exists;
 

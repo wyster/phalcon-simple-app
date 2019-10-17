@@ -11,7 +11,7 @@ use Phalcon\Mvc\Micro\Collection as MicroCollection;
 
 $index = new MicroCollection();
 
-$index->setHandler(new \app\controllers\IndexController());
+$index->setHandler(new \App\Controller\IndexController());
 $index->get('/', 'indexAction');
 $index->post('/', 'authAction');
 

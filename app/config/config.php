@@ -8,10 +8,10 @@ defined('APP_PATH') || define('APP_PATH', BASE_PATH . '/app');
 
 return new \Phalcon\Config([
     'application' => [
-        'modelsDir'      => APP_PATH . '/models/',
-        'migrationsDir'  => APP_PATH . '/migrations/',
+        'modelsDir'      => APP_PATH . '/Models/',
+        'migrationsDir'  => APP_PATH . '/Migrations/',
         'viewsDir'       => APP_PATH . '/views/',
         'baseUri'        => '/',
-        'controllersDir' => APP_PATH . '/controllers/',
+        'controllersDir' => APP_PATH . '/Controller/',
     ]
 ]);

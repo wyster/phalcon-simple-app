@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace app\test\controllers;
+namespace App\Test\Controller;
 
-use app\controllers\IndexController;
-use app\test\UnitTestCase;
+use app\Controller\IndexController;
+use App\Test\UnitTestCase;
 use Phalcon\Mvc\View;
 
 /**

@@ -1,0 +1,5 @@
+{
+  "controller" : {
+    "namespace": "App\\Controller"
+  }
+}
